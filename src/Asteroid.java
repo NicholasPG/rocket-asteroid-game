@@ -1,4 +1,4 @@
-public class Asteroid {
+public class Asteroid implements MovableObject{
 
 
 

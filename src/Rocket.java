@@ -1,4 +1,4 @@
-public class Rocket {
+public class Rocket implements MovableObject{
 
 
 
