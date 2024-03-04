@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
 public class Rocket implements MovableObject
@@ -15,16 +14,13 @@ public class Rocket implements MovableObject
         this.y = y;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
+    //GETTERS
+    public int getX() {return x;}
+    public int getY() {return y;}
 
     @Override
     public void draw(Graphics g) {
+        //Draw the rocket as a series of red lines
         Graphics2D g2 = (Graphics2D) g;
         Line2D.Double line1 = new Line2D.Double(x, y, x + 20, y + 10);
         Line2D.Double line2 = new Line2D.Double(x, y, x + 7, y + 10);
@@ -40,20 +36,14 @@ public class Rocket implements MovableObject
 
     @Override
     public void translate(int dx, int dy) {
+        //Move the rockets coordinates
         x += dx;
         y += dy;
 
-        if (x + 20 > panel.getWidth()) {
-            x = panel.getWidth() - 20;
-        }
-        if (x < 0) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-        if (y + 20 > panel.getHeight()) {
-            y = panel.getHeight() - 20;
-        }
+        //Bind the rocket to the bounds of the panel
+        if (x + 20 > panel.getWidth()) {x = panel.getWidth() - 20;}
+        if (x < 0) {x = 0;}
+        if (y < 0) { y = 0;}
+        if (y + 20 > panel.getHeight()) {y = panel.getHeight() - 20;}
     }
 }

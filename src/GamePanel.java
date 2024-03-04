@@ -1,27 +1,28 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.security.PrivateKey;
-import java.time.Year;
 import java.util.ArrayList;
 import javax.swing.*;
 
 
 public class GamePanel extends JPanel{
+    //Size of the game Panel
     private final int PANEL_HEIGHT = 500, PANEL_WIDTH = 1000;
-    private Rocket rocket;
-    private ArrayList<Asteroid> asteroids = new ArrayList<>();
-    private int rocketStartX, rocketStartY;
-    public boolean mousePressed = false;
-
-    GamePanel here = this;
+    //Location for the Rocket to start
+    private final int rocketStartX = 100, rocketStartY = 100;
+    //Delay for asteroids to move across the screen
     private final int MOVE_DELAY = 10;
+    //Delay for new asteroids to spawn
     private final int SPAWN_DELAY = 150;
+
+
+    private final Rocket rocket;
+    private ArrayList<Asteroid> asteroids = new ArrayList<>();
+    public boolean mousePressed = false;
+    private final GamePanel here = this;
 
 
     public GamePanel() {
         //Create the Rocket
-        rocketStartX = 100;
-        rocketStartY = 100;
         rocket = new Rocket(rocketStartX, rocketStartY, this);
 
         //Set up size and format of Panel
@@ -57,14 +58,14 @@ public class GamePanel extends JPanel{
         this.addMouseListener(new LaserListener());
 
         //Timer that takes in a lambda expression to move asteroids toward left
-        Timer t = new Timer(MOVE_DELAY, (e) -> {
+        Timer moveTimer = new Timer(MOVE_DELAY, (e) -> {
             for (Asteroid asteroid : asteroids) {
                 asteroid.translate(-1, 0);
             }
             here.repaint();
         });
         //Timer that takes in a lambda expression to spawn new Asteroids
-        Timer t2 = new Timer(SPAWN_DELAY, (e) -> {
+        Timer spawnTimer = new Timer(SPAWN_DELAY, (e) -> {
             int s = (int)(Math.random() * 3);
             if (s == 0) {
                 asteroids.add(new Asteroid(PANEL_WIDTH, (int)(Math.random() * (PANEL_HEIGHT - 10)), AsteroidSize.SMALL));
@@ -77,10 +78,8 @@ public class GamePanel extends JPanel{
         });
 
         //Start Both timers
-        t.start();
-        t2.start();
-
-
+        moveTimer.start();
+        spawnTimer.start();
 
         this.setFocusable(true);
     }
@@ -129,23 +128,7 @@ public class GamePanel extends JPanel{
             int laserPointY = rocket.getY() + 10;
             int laserPointX = rocket.getX() + 20;
             for (Asteroid asteroid : asteroids) {
-                AsteroidSize s = asteroid.getSize();
-                int asteroidHeight = 0;
-                switch(s) {
-                    case SMALL : {
-                        asteroidHeight = 10;
-                        break;
-                    }
-                    case MEDIUM : {
-                        asteroidHeight = 25;
-                        break;
-                    }
-                    case LARGE : {
-                        asteroidHeight = 50;
-                        break;
-                    }
-                }
-                if (laserPointY >= asteroid.getY() && laserPointY <= asteroid.getY() + asteroidHeight && laserPointX <= asteroid.getX()) {
+                if (laserPointY >= asteroid.getY() && laserPointY <= asteroid.getY() + asteroid.getHeight() && laserPointX <= asteroid.getX()) {
                     asteroids.remove(asteroid);
                     break;
                 };

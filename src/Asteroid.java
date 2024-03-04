@@ -1,12 +1,10 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
 
 public class Asteroid implements MovableObject
 {
 
-    private int x, y;
+    private int x, y, height, width;
     private final AsteroidSize size;
 
     public Asteroid(int x, int y, AsteroidSize size)
@@ -14,25 +12,21 @@ public class Asteroid implements MovableObject
         this.size = size;
         this.x = x;
         this.y = y;
+
+        height = 0;
+        width = 0;
     }
 
-    public int getY() {
-        return y;
-    }
+    //GETTERS
+    public int getY() {return y;}
+    public int getX() {return x;}
+    public int getHeight() {return height;}
+    public int getWidth() {return width;}
+    public AsteroidSize getSize() {return size;}
 
-    public int getX() {
-        return x;
-    }
-
-    public AsteroidSize getSize() {
-        return size;
-    }
 
     @Override
     public void draw(Graphics g) {
-        int width = 0;
-        int height = 0;
-
         //switch to create the asteroid the proper size
         switch(size) {
             case SMALL : {
@@ -52,18 +46,16 @@ public class Asteroid implements MovableObject
             }
         }
 
-
-        //ALL EXAMPLE FROM ROCKET CLASS
+        //Draw the Asteroid as a white ball
         Graphics2D g2 = (Graphics2D) g;
         Ellipse2D.Double ball1 = new Ellipse2D.Double(x, y, width, height);
-
-
         g2.setColor(Color.WHITE);
         g2.draw(ball1);
     }
 
     @Override
     public void translate(int dx, int dy) {
+        //switch to make smaller asteroids move faster than larger ones
         switch(size) {
             case SMALL : {
                 x += (dx * 4);
