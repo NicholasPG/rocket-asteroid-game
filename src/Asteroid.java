@@ -1,37 +1,58 @@
-import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 
-public class Asteroid implements MovableObject{
+public class Asteroid implements MovableObject
+{
 
-
-    private ImageIcon meteor;
-    private JPanel canvas;
     private int x, y;
+    private final AsteroidSize size;
 
-    public Asteroid (JPanel canvas, int x, int y) {
-        this.canvas = canvas;
-
-        meteor = new ImageIcon("meteor.png");
-        Image image = meteor.getImage();
-        Image image2 = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
-        meteor = new ImageIcon(image2);
-
-        this.x = x; //canvas.getWidth()/2;
-        this.y = y; //(int)(Math.random() * canvas.getHeight());
+    public Asteroid(int x, int y, AsteroidSize size)
+    {
+        this.size = size;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
-    public void draw(Graphics2D g2) {
-        meteor.paintIcon(canvas, g2, x, y);
+    public void draw(Graphics g) {
+        int width = 0;
+        int height = 0;
+
+        //switch to create the asteroid the proper size
+        switch(size) {
+            case SMALL : {
+                width = 10;
+                height = 10;
+                break;
+            }
+            case MEDIUM : {
+                width = 25;
+                height = 25;
+                break;
+            }
+            case LARGE : {
+                width = 50;
+                height = 50;
+                break;
+            }
+        }
+
+
+        //ALL EXAMPLE FROM ROCKET CLASS
+        Graphics2D g2 = (Graphics2D) g;
+        Ellipse2D.Double ball1 = new Ellipse2D.Double(x, y, width, height);
+
+
+        g2.setColor(Color.WHITE);
+        g2.draw(ball1);
     }
 
     @Override
     public void translate(int dx, int dy) {
-        this.x += dx;
-        this.y += dy;
-    }
-
-    public int getHeight() {
-        return meteor.getIconHeight();
+        x += dx;
+        y += dy;
     }
 }

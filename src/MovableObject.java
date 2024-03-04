@@ -2,7 +2,7 @@ import java.awt.*;
 
 public interface MovableObject {
 
-    void draw(Graphics2D g2);
+    void draw(Graphics g);
 
     void translate(int dx, int dy);
 }

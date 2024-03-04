@@ -4,18 +4,24 @@ public class Tester {
     public static void main(String[] args) {
 
         //Programming Portion Criteria: (Spaceship)Programming Portion Criteria: (Spaceship)
+
+        //THINGS THAT ARE DONE/OBVIOUS:
             //Classes in separate files.  Do class divisions make sense?
-            //Interface for MoveableObject, implemented by Rocket and Asteroid at a minimum
+            //Interface for MoveableObject, implemented by Rocket
             //Anonymous class for Keyboard Listeners
             //A Panel that extends JPanel
-            //MouseListener as an Inner class, to shoot the laser.
-            //Timer that takes in a Lambda Function.
-            //An Enum of AsteroidSize: Small, Medium, Large.
-            //Do asteroids move automatically?
             //Does spaceship move with keyboard commands?
+            //CREATE ASTEROID CLASS AND IMPLEMENT MovableObject AND THE AsteroidSize ENUM
+            //MouseListener as an Inner class, to shoot the laser.
             //Does Laser "fire"?
+
+
+
+            //Timer that takes in a Lambda Function.
+            //MAKE ASTEROIDS SPAWN on a timer
+            // MAKE ASTEROID MOVE AUTOMATICALLY (via another timer probably)
             //Do asteroids disappear after getting shot with the laser?
-            //Do more asteroids appear as the time goes on?
+
             //Extra:  Does the spaceship blow up if an asteroid hits it.  (Optional)
 
 
@@ -25,15 +31,15 @@ public class Tester {
         JFrame frame = new JFrame("Asteroid Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        frame.add(new GamePanel());
 
-        GamePanel gamePanel = new GamePanel();
-
-
-        frame.getContentPane().add(gamePanel);
         frame.pack();
         frame.setVisible(true);
 
-        //Add GamePanel to Frame
+
+        //UNCOMMENT WHEN COMPLETED TESTING
+        //frame.setResizable(false);
+
 
 
 
