@@ -6,9 +6,11 @@ public class Rocket implements MovableObject
 {
 
     private int x, y;
+    private GamePanel panel;
 
-    public Rocket(int x, int y)
+    public Rocket(int x, int y, GamePanel panel)
     {
+        this.panel = panel;
         this.x = x;
         this.y = y;
     }
@@ -40,5 +42,18 @@ public class Rocket implements MovableObject
     public void translate(int dx, int dy) {
         x += dx;
         y += dy;
+
+        if (x + 20 > panel.getWidth()) {
+            x = panel.getWidth() - 20;
+        }
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (y + 20 > panel.getHeight()) {
+            y = panel.getHeight() - 20;
+        }
     }
 }

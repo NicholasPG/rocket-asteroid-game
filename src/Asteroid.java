@@ -16,6 +16,18 @@ public class Asteroid implements MovableObject
         this.y = y;
     }
 
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public AsteroidSize getSize() {
+        return size;
+    }
+
     @Override
     public void draw(Graphics g) {
         int width = 0;
@@ -52,7 +64,21 @@ public class Asteroid implements MovableObject
 
     @Override
     public void translate(int dx, int dy) {
-        x += dx;
+        switch(size) {
+            case SMALL : {
+                x += (dx * 4);
+                break;
+            }
+            case MEDIUM : {
+                x += (dx * 2);
+                break;
+            }
+            case LARGE : {
+                x += dx;
+                break;
+            }
+        }
+
         y += dy;
     }
 }
