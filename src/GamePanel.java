@@ -12,9 +12,12 @@ public class GamePanel extends JPanel{
     //Delay for asteroids to move across the screen
     private final int MOVE_DELAY = 10;
     //Delay for new asteroids to spawn
-    private final int SPAWN_DELAY = 150;
+    private final int SPAWN_DELAY = 100;
+    //Delay to move the rocket
+    private final int ROCKET_SPEED = 3;
 
-
+    private boolean moveLeft = false, moveRight = false, moveUp = false, moveDown = false;
+    private boolean gameOver = false;
     private final Rocket rocket;
     private ArrayList<Asteroid> asteroids = new ArrayList<>();
     public boolean mousePressed = false;
@@ -35,23 +38,69 @@ public class GamePanel extends JPanel{
             }
             //Moves the rocket when arrow keys are pressed
             public void keyPressed(KeyEvent e){
+                if (gameOver) {
+                    return;
+                }
                 switch(e.getKeyCode()) {
                     case KeyEvent.VK_UP:
-                        rocket.translate(0, -10);
+                        moveUp = true;
                         break;
                     case KeyEvent.VK_DOWN:
-                        rocket.translate(0, 10);
+                        moveDown = true;
                         break;
                     case KeyEvent.VK_RIGHT:
-                        rocket.translate(10, 0);
+                        moveRight = true;
                         break;
                     case KeyEvent.VK_LEFT:
-                        rocket.translate(-10, 0);
+                        moveLeft = true;
+                        break;
+                    case KeyEvent.VK_W:
+                        moveUp = true;
+                        break;
+                    case KeyEvent.VK_S:
+                        moveDown = true;
+                        break;
+                    case KeyEvent.VK_D:
+                        moveRight = true;
+                        break;
+                    case KeyEvent.VK_A:
+                        moveLeft = true;
                         break;
                 }
                 repaint();
             }
-            public void keyReleased(KeyEvent e) {}
+            public void keyReleased(KeyEvent e) {
+                if (gameOver) {
+                    return;
+                }
+                switch(e.getKeyCode()) {
+                    case KeyEvent.VK_UP:
+                        moveUp = false;
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        moveDown = false;
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        moveRight = false;
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        moveLeft = false;
+                        break;
+                    case KeyEvent.VK_W:
+                        moveUp = false;
+                        break;
+                    case KeyEvent.VK_S:
+                        moveDown = false;
+                        break;
+                    case KeyEvent.VK_D:
+                        moveRight = false;
+                        break;
+                    case KeyEvent.VK_A:
+                        moveLeft = false;
+                        break;
+                }
+                repaint();
+            }
         });
 
         //add mouseListener to fire laser
@@ -61,10 +110,36 @@ public class GamePanel extends JPanel{
         Timer moveTimer = new Timer(MOVE_DELAY, (e) -> {
             for (Asteroid asteroid : asteroids) {
                 asteroid.translate(-1, 0);
+                if ((rocket.getX() + 20 >= asteroid.getX()
+                        && rocket.getX() + 20 <= asteroid.getX() + asteroid.getWidth()
+                        && rocket.getY() + 10 >= asteroid.getY()
+                        && rocket.getY() + 10 <= asteroid.getY() + asteroid.getHeight())) {
+                    gameOver = true;
+                    break;
+                };
+                if (rocket.getX() >= asteroid.getX()
+                        && rocket.getX() <= asteroid.getX() + asteroid.getWidth()
+                        && rocket.getY() >= asteroid.getY()
+                        && rocket.getY() <= asteroid.getY() + asteroid.getHeight()) {
+                    gameOver = true;
+                    break;
+                }
+                if (rocket.getX() >= asteroid.getX()
+                        && rocket.getX() <= asteroid.getX() + asteroid.getWidth()
+                        && rocket.getY() + 20 >= asteroid.getY()
+                        && rocket.getY() + 20 <= asteroid.getY() + asteroid.getHeight()) {
+                    gameOver = true;
+                    break;
+                }
+
+                /*if (asteroid.getX() + asteroid.getWidth() < 0) {
+                    asteroids.remove(asteroid);
+                    break;
+                }*/
             }
             here.repaint();
         });
-        //Timer that takes in a lambda expression to spawn new Asteroids
+
         Timer spawnTimer = new Timer(SPAWN_DELAY, (e) -> {
             int s = (int)(Math.random() * 3);
             if (s == 0) {
@@ -77,6 +152,32 @@ public class GamePanel extends JPanel{
             here.repaint();
         });
 
+        Timer gameOverTimer = new Timer(50, (e) -> {
+            if(gameOver) {
+                spawnTimer.stop();
+                moveTimer.stop();
+            }
+        });
+
+        Timer rocketTimer = new Timer(10, (e) -> {
+            if(moveUp) {
+                rocket.translate(0, -ROCKET_SPEED);
+            }
+            if (moveDown) {
+                rocket.translate(0, ROCKET_SPEED);
+            }
+            if (moveLeft) {
+                rocket.translate(-ROCKET_SPEED, 0);
+            }
+            if (moveRight ){
+                rocket.translate(ROCKET_SPEED, 0);
+            }
+
+        });
+
+
+        gameOverTimer.start();
+        rocketTimer.start();
         //Start Both timers
         moveTimer.start();
         spawnTimer.start();

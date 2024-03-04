@@ -43,7 +43,7 @@ public class Rocket implements MovableObject
         //Bind the rocket to the bounds of the panel
         if (x + 20 > panel.getWidth()) {x = panel.getWidth() - 20;}
         if (x < 0) {x = 0;}
-        if (y < 0) { y = 0;}
-        if (y + 20 > panel.getHeight()) {y = panel.getHeight() - 20;}
+        if (y < 0) {y = panel.getHeight() - 20;}
+        if (y + 20 > panel.getHeight()) {y = 0;}
     }
 }
